@@ -13,10 +13,14 @@
     "jade": "~1.11.0",
     "morgan": "~1.7.0",
     "sequelize": "^3.27.0",
+    "sequelize-cli": "^2.4.0",
     "serve-favicon": "~2.3.0",
     "sqlite3": "^3.1.8"
   },
   "devDependencies": {
-    "nodemon": "^1.11.0"
+    "eslint": "^3.10.2",
+    "eslint-config-google": "^0.7.0",
+    "nodemon": "^1.11.0",
+    "sequelize-cli": "^2.4.0"
   }
 }
