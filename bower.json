@@ -1,0 +1,22 @@
+{
+  "name": "darwin-viewer",
+  "description": "",
+  "main": "",
+  "authors": [
+    "Zach Gottlieb <zach@signafire.com>"
+  ],
+  "license": "MIT",
+  "homepage": "https://github.com/HackTheStacks/darwin-viewer",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.8",
+    "bootstrap": "^3.3.7",
+    "angular-route": "^1.5.8"
+  }
+}
