@@ -27,8 +27,54 @@ npm start
 - `an-option`: Some option.
 
 **Response:**
+- JSON
 ```json
 {
 	"id": 100
+}
+```
+
+### `GET /api/fragments`
+
+**Response:**
+- JSON
+
+```json
+[
+	{
+		"id": "1",
+		"url": "/fragments/1/image",
+	}
+]
+```
+
+### `GET /api/fragments/:id/image`
+
+**Params:**
+- `id`: Fragment id.
+
+**Response:**
+- Image File (jpg/png)
+
+### `GET /api/fragments/:id`
+
+**Params:**
+- `id`: Fragment id.
+
+**Response:**
+- JSON
+```json
+{
+	"id": "1",
+	"text": "Text content...",
+	"matches": [
+		{
+			"id": 2,
+			"edge": "S",
+			"confidence": 0.9,
+			"votes": 3
+		}
+		...
+	]
 }
 ```
