@@ -9,7 +9,8 @@ function AppCtrl(AppService, $scope) {
 
     AppService.getImages().then(function (response) {
         console.log(response);
-        $scope.images = response.data.images;
+        // $scope.images = response.data.images;
+        $scope.images = response.data;
         console.log($scope.images);
 
         $scope.mainImageSrc = $scope.images[0].url;
