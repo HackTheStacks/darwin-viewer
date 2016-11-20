@@ -24,26 +24,40 @@ router.get('/fragments/:id/image', (req, res) => {
 router.get('/fragments/:id', (req, res) => {
     Fragment
         .find({
+            include: [{ model: Match, as: 'matches' }],
             where: { id: req.params.id },
         })
         .then((fragment) => {
-            Match.findAll({
-                where: {
-                    $or: [
-                        { baseId: fragment.id },
-                        { targetId: fragment.id },
-                    ],
-                },
-            }).then((matches) => {
-                const fragObj = fragment.toJSON();
-                fragObj.matches = matches.map(m => m.toJSON());
-                res.json(fragObj);
-            });
+            res.json(fragment);
         }).catch((err) => {
             res.json(err.stack);
         });
 });
 
-// route.post('/fragments/:id/')
+router.post('/matches', (req, res) => {
+    const { baseId, targetId, confidence, votes, edge } = req.body;
+    console.log(req.body);
+    Match.create({ baseId, targetId, confidence, votes, edge }).then((newMatch) => {
+        res.json(newMatch);
+    }).catch((err) => {
+        res.status(500).send(err);
+    });
+});
+
+router.put('/matches/:id/upvote', (req, res) => {
+    Match.find({ where: { id: req.params.id } }).then((match) => {
+        match.update({ votes: match.votes + 1}).then((updatedMatch) => {
+            res.json(updatedMatch);
+        });
+    });
+});
+
+router.put('/matches/:id/downvote', (req, res) => {
+    Match.find({ where: { id: req.params.id } }).then((match) => {
+        match.update({ votes: match.votes - 1}).then((updatedMatch) => {
+            res.json(updatedMatch);
+        });
+    });
+});
 
 module.exports = router;

@@ -6,7 +6,7 @@ module.exports = function(sequelize, DataTypes) {
     }, {
         classMethods: {
             associate: function(models) {
-
+                Fragment.hasMany(models.Match, { as: 'matches', foreignKey: 'baseId' });
             },
         },
     });

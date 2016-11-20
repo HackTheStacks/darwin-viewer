@@ -51,6 +51,7 @@ npm start
 	"url": "/fragments/1/image",
 	"matches": [
 		{
+            "id": 10,
 			"baseId": 1,
             "targetId": 2,
 			"edge": "S",
@@ -70,20 +71,25 @@ npm start
 **Response:**
 - Image File (jpg/png)
 
-### `POST /api/fragments/:id/match`
-
-**Params:**
-- `id`: Id of main fragment.
+### `POST /api/matches`
 
 **Body:**
-- `fragment_id`: Second fragment matched against.
+- `baseId`: Id of main fragment.
+- `targetId`: Second fragment matched against.
 - `edge`: Relative to main fragment. (`N`, `S`, `E`, `W`)
 - `confidence`: Number to indicate the confidence of the match.
 
 ```json
 {
+    "baseId": 2,
 	"targetId": 1,
 	"edge": "S",
-	"confidence": 0.9,
+	"confidence": 9,
+    "votes": 10,
 }
 ```
+
+### `PUT /api/matches/:id/(upvote | downvote)`
+
+**Params:**
+- `id`: Id of a match to upvote / downvote

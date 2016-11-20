@@ -6,7 +6,6 @@ module.exports = function(sequelize, DataTypes) {
         edge: DataTypes.STRING,
         confidence: DataTypes.INTEGER,
         votes: DataTypes.INTEGER,
-
     }, {
         classMethods: {
             associate: function(models) {
