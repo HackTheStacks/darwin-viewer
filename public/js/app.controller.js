@@ -6,28 +6,28 @@ function AppCtrl(AppService) {
 
     // Zooming
 
-    vm.zoomVal = 1;
-
-    vm.zoomIn = function (imgSelector) {
-        var img = $(imgSelector);
-        vm.zoomVal = vm.zoomVal + 0.1;
-        img.css('zoom', vm.zoomVal);
-    };
-
-    vm.zoomOut = function (imgSelector) {
-        var img = $(imgSelector);
-
-        if (vm.zoomVal > 1) {
-            vm.zoomVal = vm.zoomVal - 0.1;
-            img.css('zoom', vm.zoomVal);
-        }
-    };
-
-    vm.zoomZero = function (imgSelector) {
-        var img = $(imgSelector);
-        vm.zoomVal = 1;
-        img.css('zoom', vm.zoomVal);
-    };
+    // vm.zoomVal = 1;
+    //
+    // vm.zoomIn = function (imgSelector) {
+    //     var img = $(imgSelector);
+    //     vm.zoomVal = vm.zoomVal + 0.1;
+    //     img.css('zoom', vm.zoomVal);
+    // };
+    //
+    // vm.zoomOut = function (imgSelector) {
+    //     var img = $(imgSelector);
+    //
+    //     if (vm.zoomVal > 1) {
+    //         vm.zoomVal = vm.zoomVal - 0.1;
+    //         img.css('zoom', vm.zoomVal);
+    //     }
+    // };
+    //
+    // vm.zoomZero = function (imgSelector) {
+    //     var img = $(imgSelector);
+    //     vm.zoomVal = 1;
+    //     img.css('zoom', vm.zoomVal);
+    // };
 
     // Matching response
 
@@ -37,7 +37,6 @@ function AppCtrl(AppService) {
     };
 
     vm.nextImage = function () {
-        console.log('curr match index', vm.currMatchIndex, vm.imageToMatch.matches.length);
         vm.currMatchIndex++;
         if (vm.currMatchIndex < vm.imageToMatch.matches.length) {
             vm.currMatchImageSrc = '/api/fragments/' + vm.imageToMatch.matches[vm.currMatchIndex].targetId + '/image';
@@ -48,7 +47,6 @@ function AppCtrl(AppService) {
 
     vm.nextImageSet = function () {
         vm.currentImageIndex++;
-        // vm.imageToMatch = vm.images[vm.currentImageIndex];
         angular.extend(vm.imageToMatch, vm.images[vm.currentImageIndex]);
         vm.endOfMatches = false;
         vm.currMatchIndex = 0;

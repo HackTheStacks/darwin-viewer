@@ -1,7 +1,7 @@
 <!DOCTYPE>
 <html ng-app="app">
 <head>
-    <title>Darwin Viewer</title>
+    <title>Darwin Manuscripts Fragment Matcher</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
@@ -12,7 +12,7 @@
 <header class="navbar navbar-default">
     <div class="container-fluid">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Darwin Fragment Matcher</a>
+            <a class="navbar-brand" href="#">Darwin Manuscripts Fragment Matcher</a>
         </div>
     </div>
 </header>
@@ -28,23 +28,7 @@
             </div>
         </div>
         <div class="col-xs-2">
-            <div class="toolbar">
-                <div>
-                    <button class="btn btn-sm" ng-click="vm.zoomZero('.main-image')">
-                        <span>Original</span>
-                    </button>
-                </div>
-                <div>
-                    <button class="btn btn-sm" ng-click="vm.zoomOut('.main-image')">
-                        <i class="glyphicon glyphicon-minus"></i>
-                    </button>
-                </div>
-                <div>
-                    <button class="btn btn-sm" ng-click="vm.zoomIn('.main-image')">
-                        <i class="glyphicon glyphicon-plus"></i>
-                    </button>
-                </div>
-            </div>
+            <zoom-toolbar class="toolbar" img-selector=".main-image"></zoom-toolbar>
             <div>
                 <p>Filename: {{vm.imageToMatch.filename}}</p>
             </div>
@@ -53,7 +37,7 @@
     <div class="row">
         <div class="col-xs-10">
             <div class="image-container js-zoom test" style="width: 100%" ng-if="!vm.endOfMatches">
-                <pan><img class="test-image" ng-src="{{vm.currMatchImageSrc}}" style="height: 300px"/></pan>
+                <pan><img class="test-image" ng-src="{{vm.currMatchImageSrc}}" style="width: 500px"/></pan>
                 <span>click and drag to pan image!</span>
             </div>
             <div ng-if="vm.endOfMatches" style="padding: 50px 0">
@@ -62,26 +46,10 @@
         </div>
         <div class="col-xs-2">
             <div ng-if="vm.currMatchIndex <= (vm.imageToMatch.matches.length - 1)">
-                <div class="toolbar">
-                    <div>
-                        <button class="btn btn-sm" ng-click="vm.zoomZero('.test-image')">
-                            <span>Original</span>
-                        </button>
-                    </div>
-                    <div>
-                        <button class="btn btn-sm" ng-click="vm.zoomOut('.test-image')">
-                            <i class="glyphicon glyphicon-minus"></i>
-                        </button>
-                    </div>
-                    <div>
-                        <button class="btn btn-sm" ng-click="vm.zoomIn('.test-image')">
-                            <i class="glyphicon glyphicon-plus"></i>
-                        </button>
-                    </div>
-                </div>
+                <zoom-toolbar class="toolbar" img-selector=".test-image"></zoom-toolbar>
                 <div>
                     <p>{{vm.currMatchIndex + 1}} of {{vm.imageToMatch.matches.length}}</p>
-                    <p>Edge: {{vm.imageToMatch.matches[vm.currMatchIndex].edge || 'n/a'}}</p>
+                    <!--<p>Edge: {{vm.imageToMatch.matches[vm.currMatchIndex].edge || 'n/a'}}</p>-->
                     <p>Confidence Score: {{vm.imageToMatch.matches[vm.currMatchIndex].confidence || 'n/a'}}</p>
                 </div>
             </div>
@@ -106,7 +74,9 @@
 <script src="js/app.js"></script>
 <script src="js/app.controller.js"></script>
 <script src="js/app.service.js"></script>
-<script src="js/pan.directive.js"></script>
+<script src="js/directives/pan.directive.js"></script>
+<script src="js/directives/zoomToolbar/zoomToolbar.directive.js"></script>
+
 
 </body>
 </html>
