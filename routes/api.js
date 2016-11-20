@@ -6,28 +6,13 @@ const models = require('../models');
 const Fragment = models.Fragment;
 const Match = models.Match;
 
-const mockFragments = [
-	{
-		id: '1',
-		url: '/api/fragments/1/image',
-	},
-	{
-		id: '2',
-		url: '/api/fragments/2/image',
-	},
-	{
-		id: '3',
-		url: '/api/fragments/3/image',
-	},
-];
+const imgBase = path.join(__dirname, '..', 'data', 'images');
 
 router.get('/fragments', (req, res) => {
     Fragment.findAll().then((fragments) => {
         res.json(fragments);
     });
 });
-
-const imgBase = path.join(__dirname, '..', 'data', 'images');
 
 router.get('/fragments/:id/image', (req, res) => {
     Fragment.find({ where: { id: req.params.id } }).then((fragment) => {
@@ -36,34 +21,29 @@ router.get('/fragments/:id/image', (req, res) => {
     });
 });
 
-const mockFragment = {
-	id: '1',
-	url: '/api/fragments/1/image',
-	text: 'I\'m Darwin! Look at me! :D',
-	matches: [
-		{
-			id: '2',
-			edge: 'S',
-			confidence: '90',
-			votes: 3,
-		},
-		{
-			id: '3',
-			edge: 'W',
-			confidence: '70',
-			votes: 1,
-		},
-	],
-};
-
 router.get('/fragments/:id', (req, res) => {
     Fragment
-        .find({ include: [{ model: Match, as: 'matches' }], where: { id: req.params.id } })
+        .find({
+            where: { id: req.params.id },
+        })
         .then((fragment) => {
-            res.json(fragment);
+            Match.findAll({
+                where: {
+                    $or: [
+                        { baseId: fragment.id },
+                        { targetId: fragment.id },
+                    ],
+                },
+            }).then((matches) => {
+                const fragObj = fragment.toJSON();
+                fragObj.matches = matches.map(m => m.toJSON());
+                res.json(fragObj);
+            });
         }).catch((err) => {
             res.json(err.stack);
         });
 });
+
+// route.post('/fragments/:id/')
 
 module.exports = router;
