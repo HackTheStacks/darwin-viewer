@@ -18,23 +18,10 @@ npm start
 
 ## API
 
-### `GET /some-endpoint/:a-param/view?an-option="a-value"`
-
-**Params:**
-- `a-param`: Some param.
+### `GET /api/fragments`
 
 **Options:**
-- `an-option`: Some option.
-
-**Response:**
-- JSON
-```json
-{
-	"id": 100
-}
-```
-
-### `GET /api/fragments`
+- `page`: Paginated data
 
 **Response:**
 - JSON
@@ -45,16 +32,9 @@ npm start
 		"id": "1",
 		"url": "/fragments/1/image",
 	}
+	...
 ]
 ```
-
-### `GET /api/fragments/:id/image`
-
-**Params:**
-- `id`: Fragment id.
-
-**Response:**
-- Image File (jpg/png)
 
 ### `GET /api/fragments/:id`
 
@@ -78,3 +58,11 @@ npm start
 	]
 }
 ```
+
+### `GET /api/fragments/:id/image`
+
+**Params:**
+- `id`: Fragment id.
+
+**Response:**
+- Image File (jpg/png)
