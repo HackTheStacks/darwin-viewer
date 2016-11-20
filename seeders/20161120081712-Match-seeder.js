@@ -1,11 +1,15 @@
 'use strict';
+const path = require('path');
+const frags = require(path.resolve(__dirname + '/../data/a-with-images.json'));
 
-const fakeMatches = Array.apply(null, { length: 50 })
-.map((v, i) => i + 1)
-.map((v) => ({
-    id: v,
-    targetId: Math.floor(Math.random() * 50),
-    baseId: Math.floor(Math.random() * 50),
+const randomFragId = () => {
+    return frags[Math.floor(Math.random() * frags.length)].eid;
+}
+
+const data = frags.map((f, i) => ({
+    id: i + 1,
+    targetId: randomFragId(),
+    baseId: randomFragId(),
     votes: Math.floor(Math.random() * 20),
     confidence: Math.floor(Math.random() * 30),
     edge: (['N', 'S', 'E', 'W'])[Math.round(Math.random() * 4)],
@@ -25,7 +29,7 @@ module.exports = {
         isBetaMember: false
     }], {});
     */
-    return queryInterface.bulkInsert('Matches', fakeMatches);
+    return queryInterface.bulkInsert('Matches', data, {});
 },
 
 down: function(queryInterface, Sequelize) {

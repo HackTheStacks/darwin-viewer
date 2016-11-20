@@ -1,14 +1,23 @@
 'use strict';
 
-const fakeData = Array.apply(null, { length: 50 }).map((v, i) => i + 1).map((v, i) => (
-    {
-        id: i,
-        filename: `paper-${( i % 3 ) + 1}.jpg`,
-        text: `This is the ${v} note`,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-    }
-));
+// const fakeData = Array.apply(null, { length: 50 }).map((v, i) => i + 1).map((v, i) => (
+//     {
+//         id: i,
+//         filename: `paper-${( i % 3 ) + 1}.jpg`,
+//         text: `This is the ${v} note`,
+//         createdAt: new Date(),
+//         updatedAt: new Date(),
+//     }
+// ));
+const path = require('path');
+const frags = require(path.resolve(__dirname + '/../data/a-with-images.json'));
+const data = frags.map((f) => ({
+    id: f.eid,
+    filename: f.filename,
+    text: f.text,
+    createdAt: new Date(),
+    updatedAt: new Date(),
+}));
 
 module.exports = {
     up: function(queryInterface, Sequelize) {
@@ -22,7 +31,7 @@ module.exports = {
         isBetaMember: false
     }], {});
     */
-    return queryInterface.bulkInsert('Fragments', fakeData, {});
+    return queryInterface.bulkInsert('Fragments', data, {});
 },
 
 down: function(queryInterface, Sequelize) {
