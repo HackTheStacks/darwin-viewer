@@ -10,9 +10,19 @@ cd darwin-viewer
 npm install
 ```
 
+Possible other dependencies:
+
+```bash
+brew install sqlite3
+npm install -g sqlite3
+npm install -g sequelize
+```
+
 ## Usage
 
 ```bash
+sequelize db:migrate
+sequelize db:seed:all
 npm start
 ```
 
