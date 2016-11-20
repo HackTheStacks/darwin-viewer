@@ -15,13 +15,14 @@ const fs = require('fs');
 
 const textFile = __dirname + '/image_to_text.csv';
 const fileIdentifiers = __dirname + '/file_identifiers.csv';
+const neighboursJson = __dirname + '/friends.json';
 
 const hasImage = (str) => {
     return /.*\.jpg/.test(str);
 };
 
 const limitCount = (el, idx) => {
-    return idx <= 200000;
+    return idx <= 300000;
 };
 
 const cleanRow = (str) => {
@@ -29,7 +30,7 @@ const cleanRow = (str) => {
     const matches = str[0].match(/.*\.jpg/);
     newRow.filename = matches[0];
     newRow.text = '';
-    const text = str[0].replace(newRow.filename, '');
+    const text = str[0].replace(newRow.filename, '').replace(',b\'', '');
 
     const p = buildHtmlParser(newRow);
     p.write(text);
@@ -55,19 +56,37 @@ const vacuumIds = (cb) => {
     });
 };
 
+const vacuumNeighbours = (cb) => {
+    fs.readFile(neighboursJson, (err, data) => {
+        const json = JSON.parse(data);
+        const reduced = json.reduce((merged, n) => {
+            const baseId = n[0];
+            const neigbours = n[1];
+
+            const eid = baseId.match(/\d+/)[0];
+            const neighbourObjs = neigbours.map((n) => {
+                const neid = n.match(/\d+/)[0];
+                const edge = n.match(/\_(\w)\w*\.csv/)[1].toUpperCase();
+                return { targetId: neid, edge };
+            });
+
+            merged[eid] = neighbourObjs;
+
+            return merged;
+        }, {});
+        cb(reduced);
+    });
+};
+
 const mergeData = (textData, idData) => {
     const reduced = textData.reduce((merged, t) => {
-        if (t && t.filename) {
-            merged[t.filename] = t;
-        }
+        merged[t.filename] = t;
         return merged;
     }, {});
 
     idData.reduce((merged, t) => {
         if (merged[t.filename]) {
             merged[t.filename].eid = t.eid;
-        } else {
-            delete merged[t.filename];
         }
         return merged;
     }, reduced);
@@ -84,6 +103,7 @@ vacuumText((textData) => {
             }
             return list;
         }, []);
-        console.log(done);
+        done.sort((el1, el2) => el1.filename > el2.filename);
+        fs.writeFileSync(__dirname + '/../data/aggregated.json', JSON.stringify(done, null, 4));
     });
-})
+});
