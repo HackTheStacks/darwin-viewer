@@ -9,7 +9,9 @@ const Match = models.Match;
 const imgBase = path.join(__dirname, '..', 'data', 'images');
 
 router.get('/fragments', (req, res) => {
-    Fragment.findAll().then((fragments) => {
+    Fragment.findAll({
+        include: [{ model: Match, as: 'matches' }],
+    }).then((fragments) => {
         res.json(fragments);
     });
 });
