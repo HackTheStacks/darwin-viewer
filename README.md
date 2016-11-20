@@ -25,3 +25,10 @@ npm start
 
 **Options:**
 - `an-option`: Some option.
+
+**Response:**
+```json
+{
+	"id": 100
+}
+```
