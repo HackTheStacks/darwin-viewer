@@ -22,12 +22,8 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-<<<<<<< HEAD
-app.use('/bower_components',  express.static(__dirname + '/lib'));
-=======
 app.use(express.static(path.join(__dirname, 'data', 'images')));
 app.use('/bower_components',  express.static(__dirname + '/bower_components'));
->>>>>>> api-spec
 
 app.use('/', index);
 app.use('/users', users);
