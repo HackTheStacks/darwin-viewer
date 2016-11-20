@@ -43,6 +43,7 @@ npm start
 
 **Response:**
 - JSON
+- Matches where `baseId` is `id`
 ```json
 {
 	"id": "1",
@@ -50,7 +51,8 @@ npm start
 	"url": "/fragments/1/image",
 	"matches": [
 		{
-			"fragment_id": 2,
+			"baseId": 1,
+            "targetId": 2,
 			"edge": "S",
 			"confidence": 0.9,
 			"votes": 3
@@ -80,7 +82,7 @@ npm start
 
 ```json
 {
-	"fragment_id": 1,
+	"targetId": 1,
 	"edge": "S",
 	"confidence": 0.9,
 }

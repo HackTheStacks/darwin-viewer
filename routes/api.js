@@ -4,6 +4,7 @@ const path = require('path');
 const models = require('../models');
 
 const Fragment = models.Fragment;
+const Match = models.Match;
 
 const mockFragments = [
 	{
@@ -21,7 +22,9 @@ const mockFragments = [
 ];
 
 router.get('/fragments', (req, res) => {
-	res.json(mockFragments);
+    Fragment.findAll().then((fragments) => {
+        res.json(fragments);
+    });
 });
 
 const imgBase = path.join(__dirname, '..', 'data', 'images');
@@ -54,9 +57,13 @@ const mockFragment = {
 };
 
 router.get('/fragments/:id', (req, res) => {
-    Fragment.find({ where: { id: req.params.id } }).then((fragment) => {
-        res.json(fragment);
-    });
+    Fragment
+        .find({ include: [{ model: Match, as: 'matches' }], where: { id: req.params.id } })
+        .then((fragment) => {
+            res.json(fragment);
+        }).catch((err) => {
+            res.json(err.stack);
+        });
 });
 
 module.exports = router;
