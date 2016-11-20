@@ -1,54 +1,65 @@
 const express = require('express');
 const router = express.Router();
 const path = require('path');
+const models = require('../models');
 
-const mockFragments = [
-	{
-		id: '1',
-		url: '/api/fragments/1/image',
-	},
-	{
-		id: '2',
-		url: '/api/fragments/2/image',
-	},
-	{
-		id: '3',
-		url: '/api/fragments/3/image',
-	},
-];
+const Fragment = models.Fragment;
+const Match = models.Match;
+
+const imgBase = path.join(__dirname, '..', 'data', 'images');
 
 router.get('/fragments', (req, res) => {
-	res.json(mockFragments);
+    Fragment.findAll({
+        include: [{ model: Match, as: 'matches' }],
+    }).then((fragments) => {
+        res.json(fragments);
+    });
 });
-
-const mockImage = path.resolve(path.join(__dirname, '..', 'data', 'images', 'paper.png'));
 
 router.get('/fragments/:id/image', (req, res) => {
-	res.sendFile(mockImage);
+    Fragment.find({ where: { id: req.params.id } }).then((fragment) => {
+        const imagePath = path.resolve(path.join(imgBase, fragment.filename));
+        res.sendFile(imagePath);
+    });
 });
 
-const mockFragment = {
-	id: '1',
-	url: '/api/fragments/1/image',
-	text: 'I\'m Darwin! Look at me! :D',
-	matches: [
-		{
-			id: '2',
-			edge: 'S',
-			confidence: '90',
-			votes: 3,
-		},
-		{
-			id: '3',
-			edge: 'W',
-			confidence: '70',
-			votes: 1,
-		},
-	],
-};
-
 router.get('/fragments/:id', (req, res) => {
-	res.json(mockFragment);
+    Fragment
+        .find({
+            include: [{ model: Match, as: 'matches' }],
+            where: { id: req.params.id },
+        })
+        .then((fragment) => {
+            res.json(fragment);
+        }).catch((err) => {
+            res.json(err.stack);
+        });
+});
+
+router.post('/matches', (req, res) => {
+    const { baseId, targetId, confidence, votes, edge } = req.body;
+    console.log(req.body);
+    Match.create({ baseId, targetId, confidence, votes, edge }).then((newMatch) => {
+        res.json(newMatch);
+    }).catch((err) => {
+        res.status(500).send(err);
+    });
+});
+
+router.put('/matches/:id/upvote', (req, res) => {
+    Match.find({ where: { id: req.params.id } }).then((match) => {
+        match.update({ votes: match.votes + 1}).then((updatedMatch) => {
+            res.json(updatedMatch);
+        });
+    });
+});
+
+router.put('/matches/:id/downvote', (req, res) => {
+    Match.find({ where: { id: req.params.id } }).then((match) => {
+        match.update({ votes: match.votes - 1}).then((updatedMatch) => {
+            res.json(updatedMatch);
+        });
+    });
 });
 
 module.exports = router;

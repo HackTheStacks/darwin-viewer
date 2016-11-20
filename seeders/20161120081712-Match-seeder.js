@@ -1,14 +1,17 @@
 'use strict';
 
-const fakeData = Array.apply(null, { length: 50 }).map((v, i) => i + 1).map((v, i) => (
-    {
-        id: i,
-        filename: `paper-${( i % 3 ) + 1}.jpg`,
-        text: `This is the ${v} note`,
-        createdAt: new Date(),
-        updatedAt: new Date(),
-    }
-));
+const fakeMatches = Array.apply(null, { length: 50 })
+.map((v, i) => i + 1)
+.map((v) => ({
+    id: v,
+    targetId: Math.floor(Math.random() * 50),
+    baseId: Math.floor(Math.random() * 50),
+    votes: Math.floor(Math.random() * 20),
+    confidence: Math.floor(Math.random() * 30),
+    edge: (['N', 'S', 'E', 'W'])[Math.round(Math.random() * 4)],
+    createdAt: new Date(),
+    updatedAt: new Date(),
+}));
 
 module.exports = {
     up: function(queryInterface, Sequelize) {
@@ -22,7 +25,7 @@ module.exports = {
         isBetaMember: false
     }], {});
     */
-    return queryInterface.bulkInsert('Fragments', fakeData, {});
+    return queryInterface.bulkInsert('Matches', fakeMatches);
 },
 
 down: function(queryInterface, Sequelize) {
@@ -33,6 +36,6 @@ down: function(queryInterface, Sequelize) {
     Example:
     return queryInterface.bulkDelete('Person', null, {});
     */
-    return queryInterface.bulkDelete('Fragments', null, {});
+    return queryInterface.bulkDelete('Matches', null, {});
 },
 };

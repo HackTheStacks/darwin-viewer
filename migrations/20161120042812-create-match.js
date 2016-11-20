@@ -8,10 +8,10 @@ module.exports = {
         primaryKey: true,
         type: Sequelize.INTEGER
       },
-      base_id: {
+      baseId: {
         type: Sequelize.INTEGER
       },
-      target_id: {
+      targetId: {
         type: Sequelize.INTEGER
       },
       edge: {
