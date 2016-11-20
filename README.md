@@ -47,6 +47,7 @@ npm start
 {
 	"id": "1",
 	"text": "Text content...",
+	"url": "/fragments/1/image",
 	"matches": [
 		{
 			"id": 2,
