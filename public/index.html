@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="bower_components/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="stylesheets/style.css">
 </head>
-<body ng-controller="AppCtrl">
+<body ng-controller="AppCtrl as vm">
 
 <header class="navbar navbar-default">
     <div class="container-fluid">
@@ -19,60 +19,90 @@
 
 <div class="container-fluid">
     <div class="row">
-        <div class="col-xs-6 col-xs-offset-4">
-            <span>Do these fragments match?</span>
-            <div class="matching-button-bar">
-                <button class="btn btn-danger" ng-click="answerMatch(-1)">No</button>
-                <button class="btn btn-default" ng-click="answerMatch(0)">Maybe</button>
-                <button class="btn btn-success" ng-click="answerMatch(1)">Yes</button>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-12">
+        <div class="col-xs-10">
             <div class="image-container js-zoom main" style="width: 100%">
-                <div class="toolbar">
-                    <button class="btn btn-sm" ng-click="zoomZero('.main-image')">
-                        <span>Zero</span>
+                <pan><img class="main-image"
+                          ng-src="/api/fragments/{{vm.imageToMatch.id}}/image"
+                          style="height: 300px"/></pan>
+                <span>click and drag to pan image!</span>
+            </div>
+        </div>
+        <div class="col-xs-2">
+            <div class="toolbar">
+                <div>
+                    <button class="btn btn-sm" ng-click="vm.zoomZero('.main-image')">
+                        <span>Original</span>
                     </button>
-                    <button class="btn btn-sm" ng-click="zoomOut('.main-image')">
+                </div>
+                <div>
+                    <button class="btn btn-sm" ng-click="vm.zoomOut('.main-image')">
                         <i class="glyphicon glyphicon-minus"></i>
                     </button>
-                    <button class="btn btn-sm" ng-click="zoomIn('.main-image')">
+                </div>
+                <div>
+                    <button class="btn btn-sm" ng-click="vm.zoomIn('.main-image')">
                         <i class="glyphicon glyphicon-plus"></i>
                     </button>
                 </div>
-                <pan><img class="main-image" ng-src="{{mainImageSrc}}" style="height: 300px"/></pan>
+            </div>
+            <div>
+                <p>Filename: {{vm.imageToMatch.filename}}</p>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-xs-12">
-            <div class="image-container js-zoom test" style="width: 100%">
-                <div class="toolbar">
-                    <button class="btn btn-sm" ng-click="zoomZero('.test-image')">
-                        <span>Zero</span>
-                    </button>
-                    <button class="btn btn-sm" ng-click="zoomOut('.test-image')">
-                        <i class="glyphicon glyphicon-minus"></i>
-                    </button>
-                    <button class="btn btn-sm" ng-click="zoomIn('.test-image')">
-                        <i class="glyphicon glyphicon-plus"></i>
-                    </button>
-                </div>
-                <pan><img class="test-image" ng-src="{{testImageSrc}}" style="height: 300px"/></pan>
+        <div class="col-xs-10">
+            <div class="image-container js-zoom test" style="width: 100%" ng-if="!vm.endOfMatches">
+                <pan><img class="test-image" ng-src="{{vm.currMatchImageSrc}}" style="height: 300px"/></pan>
+                <span>click and drag to pan image!</span>
+            </div>
+            <div ng-if="vm.endOfMatches" style="padding: 50px 0">
+                <p>End of potential matches! <a href ng-click="vm.nextImageSet()">Go to next set.</a></p>
             </div>
         </div>
-    </div>
-    <div class="row">
-
+        <div class="col-xs-2">
+            <div ng-if="vm.currMatchIndex <= (vm.imageToMatch.matches.length - 1)">
+                <div class="toolbar">
+                    <div>
+                        <button class="btn btn-sm" ng-click="vm.zoomZero('.test-image')">
+                            <span>Original</span>
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm" ng-click="vm.zoomOut('.test-image')">
+                            <i class="glyphicon glyphicon-minus"></i>
+                        </button>
+                    </div>
+                    <div>
+                        <button class="btn btn-sm" ng-click="vm.zoomIn('.test-image')">
+                            <i class="glyphicon glyphicon-plus"></i>
+                        </button>
+                    </div>
+                </div>
+                <div>
+                    <p>{{vm.currMatchIndex + 1}} of {{vm.imageToMatch.matches.length}}</p>
+                    <p>Edge: {{vm.imageToMatch.matches[vm.currMatchIndex].edge || 'n/a'}}</p>
+                    <p>Confidence Score: {{vm.imageToMatch.matches[vm.currMatchIndex].confidence || 'n/a'}}</p>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 
+<footer class="footer">
+    <div class="col-xs-6 col-xs-offset-4">
+        <span>Do these fragments match?</span>
+        <div class="matching-button-bar">
+            <button class="btn btn-danger" ng-click="vm.answerMatch(-1)">No</button>
+            <button class="btn btn-default" ng-click="vm.answerMatch(0)">Maybe</button>
+            <button class="btn btn-success" ng-click="vm.answerMatch(1)">Yes</button>
+        </div>
+    </div>
+</footer>
 <script src="bower_components/jquery/dist/jquery.min.js"></script>
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-route/angular-route.js"></script>
+<script src="bower_components/angular/angular.min.js"></script>
+<script src="bower_components/angular-route/angular-route.min.js"></script>
 <script src="js/app.js"></script>
 <script src="js/app.controller.js"></script>
 <script src="js/app.service.js"></script>

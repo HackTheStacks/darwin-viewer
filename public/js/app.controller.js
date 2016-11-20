@@ -1,65 +1,88 @@
 'use strict';
 
-function AppCtrl(AppService, $scope) {
+function AppCtrl(AppService) {
+    var vm = this;
     console.log('app ctrl loaded');
-
-    $scope.images = [];
-    $scope.currentImageIndex = 0;
-    $scope.endOfImages = false;
-
-    AppService.getImages().then(function (response) {
-        console.log(response);
-        // $scope.images = response.data.images;
-        $scope.images = response.data;
-        console.log($scope.images);
-
-        $scope.mainImageSrc = $scope.images[0].url;
-        $scope.testImageSrc = $scope.images[$scope.currentImageIndex].url;
-    });
 
     // Zooming
 
-    $scope.zoomVal = 1;
+    vm.zoomVal = 1;
 
-    $scope.zoomIn = function (imgSelector) {
+    vm.zoomIn = function (imgSelector) {
         var img = $(imgSelector);
-        $scope.zoomVal = $scope.zoomVal + 0.1;
-        img.css('zoom', $scope.zoomVal);
+        vm.zoomVal = vm.zoomVal + 0.1;
+        img.css('zoom', vm.zoomVal);
     };
 
-    $scope.zoomOut = function (imgSelector) {
+    vm.zoomOut = function (imgSelector) {
         var img = $(imgSelector);
 
-        if ($scope.zoomVal > 1) {
-            $scope.zoomVal = $scope.zoomVal - 0.1;
-            img.css('zoom', $scope.zoomVal);
+        if (vm.zoomVal > 1) {
+            vm.zoomVal = vm.zoomVal - 0.1;
+            img.css('zoom', vm.zoomVal);
         }
     };
 
-    $scope.zoomZero = function(imgSelector) {
+    vm.zoomZero = function (imgSelector) {
         var img = $(imgSelector);
-
-        img.css('zoom', 1);
+        vm.zoomVal = 1;
+        img.css('zoom', vm.zoomVal);
     };
 
     // Matching response
 
-    $scope.answerMatch = function (matchValue) {
+    vm.answerMatch = function (matchValue) {
         console.log('is match?', matchValue);
-        nextImage();
+        vm.nextImage();
     };
 
-    function nextImage() {
-        $scope.currentImageIndex++;
-        if ($scope.currentImageIndex < $scope.images.length) {
-            $scope.testImageSrc = $scope.images[$scope.currentImageIndex].url;
+    vm.nextImage = function () {
+        console.log('curr match index', vm.currMatchIndex, vm.imageToMatch.matches.length);
+        vm.currMatchIndex++;
+        if (vm.currMatchIndex < vm.imageToMatch.matches.length) {
+            vm.currMatchImageSrc = '/api/fragments/' + vm.imageToMatch.matches[vm.currMatchIndex].targetId + '/image';
         } else {
-            $scope.endOfImages = true;
+            vm.endOfMatches = true;
         }
+    };
 
+    vm.nextImageSet = function () {
+        vm.currentImageIndex++;
+        // vm.imageToMatch = vm.images[vm.currentImageIndex];
+        angular.extend(vm.imageToMatch, vm.images[vm.currentImageIndex]);
+        vm.endOfMatches = false;
+        vm.currMatchIndex = 0;
+    };
+
+    initialize();
+
+    function initialize() {
+        vm.loading = true;
+        AppService.getImages().then(function (response) {
+            console.log(response);
+            // vm.images = response.data.images;
+            vm.images = response.data;
+            console.log(vm.images);
+
+            angular.extend(vm.imageToMatch, vm.images[0]);
+            vm.potentialMatches = vm.imageToMatch.matches;
+            console.log('image to match', vm.imageToMatch);
+            vm.mainImageId = vm.images[0].id;
+            vm.currMatchImageSrc = '/api/fragments/' + vm.imageToMatch.matches[vm.currMatchIndex].targetId + '/image';
+            vm.loading = false;
+        });
+
+        vm.images = [];
+        vm.imageToMatch = {};
+        vm.potentialMatches = [];
+        vm.currentImageIndex = 0;
+        vm.currMatchIndex = 0;
+        vm.endOfMatches = false;
     }
+
+
 }
 
 angular
     .module('app')
-    .controller('AppCtrl', ['AppService', '$scope', AppCtrl]);
+    .controller('AppCtrl', ['AppService', AppCtrl]);
