@@ -1,3 +1,15 @@
+body {
+    background-color: #13122f;
+}
+
+.main-content {
+    margin-bottom: 100px;
+}
+
+#canvas {
+    border: 5px solid #737373;
+}
+
 .btn-default {
     background-color: #e2e2e2;
 }
@@ -17,6 +29,7 @@
 .scroll-container {
     overflow: hidden;
     height: 300px;
+    background-color: #fff;
 }
 
 .toolbar {
@@ -43,4 +56,83 @@
     padding: 10px;
 }
 
+.image-controls {
+    color: #fff;
+}
 
+.image-controls button {
+    color: #333;
+}
+
+
+/* Resize container styles */
+/* Courtesy of https://tympanus.net/codrops/2014/10/30/resizing-cropping-images-canvas/ */
+
+.resize-container {
+    position: relative;
+    display: inline-block;
+    cursor: move;
+    margin: 0 auto;
+}
+
+.resize-container img {
+    display: block
+}
+
+.resize-container:hover img,
+.resize-container:active img {
+    outline: 2px dashed rgba(222,60,80,.9);
+}
+
+.resize-container {
+    position: relative;
+    display: inline-block;
+    cursor: move;
+    margin: 0 auto;
+}
+
+.resize-container img {
+    display: block
+}
+
+.resize-container:hover img,
+.resize-container:active img {
+    outline: 2px dashed rgba(222,60,80,.9);
+}
+
+.resize-handle-ne,
+.resize-handle-ne,
+.resize-handle-se,
+.resize-handle-nw,
+.resize-handle-sw {
+    position: absolute;
+    display: block;
+    width: 10px;
+    height: 10px;
+    background: rgba(222,60,80,.9);
+    z-index: 999;
+}
+
+.resize-handle-nw {
+    top: -5px;
+    left: -5px;
+    cursor: nw-resize;
+}
+
+.resize-handle-sw {
+    bottom: -5px;
+    left: -5px;
+    cursor: sw-resize;
+}
+
+.resize-handle-ne {
+    top: -5px;
+    right: -5px;
+    cursor: ne-resize;
+}
+
+.resize-handle-se {
+    bottom: -5px;
+    right: -5px;
+    cursor: se-resize;
+}

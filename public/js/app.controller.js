@@ -1,33 +1,6 @@
-'use strict';
-
 function AppCtrl(AppService) {
     var vm = this;
     console.log('app ctrl loaded');
-
-    // Zooming
-
-    // vm.zoomVal = 1;
-    //
-    // vm.zoomIn = function (imgSelector) {
-    //     var img = $(imgSelector);
-    //     vm.zoomVal = vm.zoomVal + 0.1;
-    //     img.css('zoom', vm.zoomVal);
-    // };
-    //
-    // vm.zoomOut = function (imgSelector) {
-    //     var img = $(imgSelector);
-    //
-    //     if (vm.zoomVal > 1) {
-    //         vm.zoomVal = vm.zoomVal - 0.1;
-    //         img.css('zoom', vm.zoomVal);
-    //     }
-    // };
-    //
-    // vm.zoomZero = function (imgSelector) {
-    //     var img = $(imgSelector);
-    //     vm.zoomVal = 1;
-    //     img.css('zoom', vm.zoomVal);
-    // };
 
     // Matching response
 
@@ -52,6 +25,11 @@ function AppCtrl(AppService) {
         vm.currMatchIndex = 0;
     };
 
+
+    // Image
+
+
+
     initialize();
 
     function initialize() {
@@ -67,8 +45,41 @@ function AppCtrl(AppService) {
             console.log('image to match', vm.imageToMatch);
             vm.mainImageId = vm.images[0].id;
             vm.currMatchImageSrc = '/api/fragments/' + vm.imageToMatch.matches[vm.currMatchIndex].targetId + '/image';
+
+            let testImg = new Image();
+            testImg.src = '/api/fragments/' + vm.imageToMatch.matches[vm.currMatchIndex].targetId + '/image';
+
+
+            testImg.onload = (e) => {
+                console.log(testImg.width);
+                let newImg = new Image();
+                newImg.src = testImg.src;
+                $(newImg).addClass('test-img');
+                $('.main-content').append(newImg);
+                renderOriginalImage(newImg);
+                // resizeableImage($(newImg));
+                var image = new ResizableImage($(newImg));
+            };
             vm.loading = false;
         });
+
+        function renderOriginalImage(img) {
+            let canvas = document.createElement('canvas');
+            let context = canvas.getContext('2d');
+
+            let base = new Image();
+            base.src = img.src;
+            base.onload = () => {
+                let ratio = base.height / base.width,
+                    newHeight = 200 / base.width * base.height;
+                canvas.width = 200;
+                canvas.height = newHeight;
+                console.log(ratio);
+                console.log(newHeight);
+                context.drawImage(base, 0, 0, 200, newHeight);
+                img.src = canvas.toDataURL('image/jpeg');
+            }
+        }
 
         vm.images = [];
         vm.imageToMatch = {};
@@ -80,7 +91,3 @@ function AppCtrl(AppService) {
 
 
 }
-
-angular
-    .module('app')
-    .controller('AppCtrl', ['AppService', AppCtrl]);

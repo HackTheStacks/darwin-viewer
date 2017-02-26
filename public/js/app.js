@@ -4,7 +4,9 @@
 angular
     .module('app', ['ngRoute'])
     .config(['$locationProvider', '$routeProvider', function($locationProvider, $routeProvider) {
-    $locationProvider.hashPrefix('!');
+        $locationProvider.hashPrefix('!');
 
-    $routeProvider.otherwise({redirectTo: '/'});
-}]);
+        $routeProvider.otherwise({redirectTo: '/'});
+    }])
+    .controller('AppCtrl', AppCtrl)
+    .factory('AppService', AppService);

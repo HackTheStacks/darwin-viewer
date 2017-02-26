@@ -17,44 +17,47 @@
     </div>
 </header>
 
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-xs-10">
-            <div class="image-container js-zoom main" style="width: 100%">
-                <pan><img class="main-image"
-                          ng-src="/api/fragments/{{vm.imageToMatch.id}}/image"
-                          style="height: 300px"/></pan>
-                <span>click and drag to pan image!</span>
-            </div>
-        </div>
-        <div class="col-xs-2">
-            <zoom-toolbar class="toolbar" img-selector=".main-image"></zoom-toolbar>
-            <div>
-                <p>Filename: {{vm.imageToMatch.filename}}</p>
-            </div>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-xs-10">
-            <div class="image-container js-zoom test" style="width: 100%" ng-if="!vm.endOfMatches">
-                <pan><img class="test-image" ng-src="{{vm.currMatchImageSrc}}" style="width: 500px"/></pan>
-                <span>click and drag to pan image!</span>
-            </div>
-            <div ng-if="vm.endOfMatches" style="padding: 50px 0">
-                <p>End of potential matches! <a href ng-click="vm.nextImageSet()">Go to next set.</a></p>
-            </div>
-        </div>
-        <div class="col-xs-2">
-            <div ng-if="vm.currMatchIndex <= (vm.imageToMatch.matches.length - 1)">
-                <zoom-toolbar class="toolbar" img-selector=".test-image"></zoom-toolbar>
-                <div>
-                    <p>{{vm.currMatchIndex + 1}} of {{vm.imageToMatch.matches.length}}</p>
-                    <!--<p>Edge: {{vm.imageToMatch.matches[vm.currMatchIndex].edge || 'n/a'}}</p>-->
-                    <p>Confidence Score: {{vm.imageToMatch.matches[vm.currMatchIndex].confidence || 'n/a'}}</p>
-                </div>
-            </div>
-        </div>
-    </div>
+<!--<div class="container-fluid">-->
+    <!--<div class="row">-->
+        <!--<div class="col-xs-10">-->
+            <!--<div class="image-container js-zoom main" style="width: 100%">-->
+                <!--<pan><img class="main-image"-->
+                          <!--ng-src="/api/fragments/{{vm.imageToMatch.id}}/image"-->
+                          <!--style="height: 300px"/></pan>-->
+                <!--<span>click and drag to pan image!</span>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="image-controls col-xs-2">-->
+            <!--<zoom-toolbar class="toolbar" img-selector=".main-image"></zoom-toolbar>-->
+            <!--<div>-->
+                <!--<p>Filename: {{vm.imageToMatch.filename}}</p>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+    <!--<div class="row">-->
+        <!--<div class="col-xs-10">-->
+            <!--<div class="image-container js-zoom test" style="width: 100%" ng-if="!vm.endOfMatches">-->
+                <!--<pan><img class="test-image" ng-src="{{vm.currMatchImageSrc}}" style="width: 500px"/></pan>-->
+                <!--<span>click and drag to pan image!</span>-->
+            <!--</div>-->
+            <!--<div ng-if="vm.endOfMatches" style="padding: 50px 0">-->
+                <!--<p>End of potential matches! <a href ng-click="vm.nextImageSet()">Go to next set.</a></p>-->
+            <!--</div>-->
+        <!--</div>-->
+        <!--<div class="col-xs-2">-->
+            <!--<div class="image-controls" ng-if="vm.currMatchIndex <= (vm.imageToMatch.matches.length - 1)">-->
+                <!--<zoom-toolbar class="toolbar" img-selector=".test-image"></zoom-toolbar>-->
+                <!--<div>-->
+                    <!--<p>{{vm.currMatchIndex + 1}} of {{vm.imageToMatch.matches.length}}</p>-->
+                    <!--&lt;!&ndash;<p>Edge: {{vm.imageToMatch.matches[vm.currMatchIndex].edge || 'n/a'}}</p>&ndash;&gt;-->
+                    <!--<p>Confidence Score: {{vm.imageToMatch.matches[vm.currMatchIndex].confidence || 'n/a'}}</p>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+<div class="main-content">
+    <!--<canvas id="canvas" width="700" height="800"></canvas>-->
 </div>
 
 <footer class="footer">
@@ -71,11 +74,12 @@
 <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
 <script src="bower_components/angular/angular.min.js"></script>
 <script src="bower_components/angular-route/angular-route.min.js"></script>
-<script src="js/app.js"></script>
+<script src="js/image-model.js"></script>
 <script src="js/app.controller.js"></script>
 <script src="js/app.service.js"></script>
-<script src="js/directives/pan.directive.js"></script>
-<script src="js/directives/zoomToolbar/zoomToolbar.directive.js"></script>
+<script src="js/app.js"></script>
+<!--<script src="directives/pan.directive.js"></script>-->
+<!--<script src="directives/zoomToolbar/zoomToolbar.directive.js"></script>-->
 
 
 </body>
