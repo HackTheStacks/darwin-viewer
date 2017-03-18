@@ -1,6 +1,5 @@
 function AppCtrl(AppService) {
     var vm = this;
-    console.log('app ctrl loaded');
 
     // Matching response
 
@@ -25,30 +24,33 @@ function AppCtrl(AppService) {
         vm.currMatchIndex = 0;
     };
 
-
-    // Image
-
-
-
     initialize();
 
     function initialize() {
         vm.loading = true;
         AppService.getImages().then(function (response) {
-            console.log(response);
-            // vm.images = response.data.images;
             vm.images = response.data;
-            console.log(vm.images);
 
             angular.extend(vm.imageToMatch, vm.images[0]);
+
             vm.potentialMatches = vm.imageToMatch.matches;
-            console.log('image to match', vm.imageToMatch);
             vm.mainImageId = vm.images[0].id;
-            vm.currMatchImageSrc = '/api/fragments/' + vm.imageToMatch.matches[vm.currMatchIndex].targetId + '/image';
+
+            let mainImg = new Image();
+            mainImg.src = '/api/fragments/' + vm.imageToMatch.id + '/image';
+
+            mainImg.onload = (e) => {
+                let newImg = new Image();
+                newImg.src = mainImg.src;
+                $(newImg).addClass('main-img');
+                $('.main-content').append(newImg);
+                renderOriginalImage(newImg);
+                var image = new ResizableImage($(newImg));
+            };
+
 
             let testImg = new Image();
             testImg.src = '/api/fragments/' + vm.imageToMatch.matches[vm.currMatchIndex].targetId + '/image';
-
 
             testImg.onload = (e) => {
                 console.log(testImg.width);
@@ -57,7 +59,6 @@ function AppCtrl(AppService) {
                 $(newImg).addClass('test-img');
                 $('.main-content').append(newImg);
                 renderOriginalImage(newImg);
-                // resizeableImage($(newImg));
                 var image = new ResizableImage($(newImg));
             };
             vm.loading = false;
@@ -90,4 +91,13 @@ function AppCtrl(AppService) {
     }
 
 
+}
+
+function showCoords(evt){
+    console.log(evt, this);
+    // var container = $('.main-content')
+    alert(
+        "clientX value: " + (evt.clientX - evt.target.offsetLeft) + "\n" +
+        "clientY value: " + (evt.clientY - evt.target.offsetTop) + "\n"
+    );
 }

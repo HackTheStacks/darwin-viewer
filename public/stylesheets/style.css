@@ -1,9 +1,18 @@
 body {
     background-color: #13122f;
+    overflow: hidden;
+}
+
+header, footer {
+    z-index: 101;
+}
+
+.navbar {
+    margin-bottom: 0; /* overwrites bootstrap style */
 }
 
 .main-content {
-    margin-bottom: 100px;
+    /*margin-bottom: 100px;*/
 }
 
 #canvas {
@@ -110,7 +119,7 @@ body {
     width: 10px;
     height: 10px;
     background: rgba(222,60,80,.9);
-    z-index: 999;
+    z-index: 100;
 }
 
 .resize-handle-nw {

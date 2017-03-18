@@ -1,12 +1,10 @@
 class ResizableImage {
     constructor($targetImg) {
-        this.$container = null;
+        this.resizeContainer = null;
         this.originalImg = new Image();
         this.targetImg = $targetImg.get(0);
-
         this.originalImg.src = this.targetImg.src;
         this.canvas = document.createElement('canvas');
-        console.log(this.originalImg);
         this.state = {};
         this.constrain = true;
         this.minWidth = 60;
@@ -14,8 +12,7 @@ class ResizableImage {
         this.maxWidth = 800;
         this.maxHeight = 800;
 
-
-// Add resize handles
+        // Add resize handles
         $($targetImg).wrap('<div class="resize-container"></div>')
             .before('<span class="resize-handle resize-handle-nw"></span>')
             .before('<span class="resize-handle resize-handle-ne"></span>')
@@ -23,9 +20,9 @@ class ResizableImage {
             .after('<span class="resize-handle resize-handle-sw"></span>');
 
         // Get a variable for the container
-        this.$container = $($targetImg).parent('.resize-container');
-        this.$container.on('mousedown touchstart', '.resize-handle', this.startResize.bind(this));
-        this.$container.on('mousedown touchstart', 'img', this.startMoving.bind(this));
+        this.resizeContainer = $($targetImg).parent('.resize-container');
+        this.resizeContainer.on('mousedown touchstart', '.resize-handle', this.startResize.bind(this));
+        this.resizeContainer.on('mousedown touchstart', 'img', this.startMoving.bind(this));
     }
 
 
@@ -50,10 +47,10 @@ class ResizableImage {
     saveEventState(e) {
         console.log('save state!');
         // Save the initial event details and container state
-        this.state.containerWidth = this.$container.width();
-        this.state.containerHeight = this.$container.height();
-        this.state.containerLeft = this.$container.offset().left;
-        this.state.containerTop = this.$container.offset().top;
+        this.state.containerWidth = this.resizeContainer.width();
+        this.state.containerHeight = this.resizeContainer.height();
+        this.state.containerLeft = this.resizeContainer.offset().left;
+        this.state.containerTop = this.resizeContainer.offset().top;
         this.state.mouseX = (e.clientX || e.pageX || e.originalEvent.touches[0].clientX) + $(window).scrollLeft();
         this.state.mouseY = (e.clientY || e.pageY || e.originalEvent.touches[0].clientY) + $(window).scrollTop();
 
@@ -77,7 +74,7 @@ class ResizableImage {
             height,
             left,
             top,
-            offset = this.$container.offset();
+            offset = this.resizeContainer.offset();
 
         mouse.x = (e.clientX || e.pageX || e.originalEvent.touches[0].clientX) + $(window).scrollLeft();
         mouse.y = (e.clientY || e.pageY || e.originalEvent.touches[0].clientY) + $(window).scrollTop();
@@ -86,14 +83,13 @@ class ResizableImage {
         height = mouse.y - this.state.containerTop;
         left = this.state.containerLeft;
         top = this.state.containerTop;
-console.log($(this.state.event.target));
+
         // Position image differently depending on the corner dragged and constraints
         if ($(this.state.event.target).hasClass('resize-handle-se')) {
             width = mouse.x - this.state.containerLeft;
             height = mouse.y - this.state.containerTop;
             left = this.state.containerLeft;
             top = this.state.containerTop;
-            console.log(this.state);
         } else if ($(this.state.event.target).hasClass('resize-handle-sw')) {
             width = this.state.containerWidth - (mouse.x - this.state.containerLeft);
             height = mouse.y - this.state.containerTop;
@@ -112,24 +108,19 @@ console.log($(this.state.event.target));
             height = this.state.containerHeight - (mouse.y - this.state.containerTop);
             left = this.state.containerLeft;
             top = mouse.y;
-            if (constrain || e.shiftKey) {
+            if (this.constrain || e.shiftKey) {
                 top = mouse.y - ((width / this.originalImg.width * this.originalImg.height) - height);
             }
         }
-console.log(this.originalImg);
+
         if (this.constrain || e.shiftKey) {
             height = width / this.originalImg.width * this.originalImg.height;
         }
 
-        console.log(width, this.minWidth);
-        console.log(width, this.maxWidth);
-        console.log(height, this.minHeight);
-        console.log(height, this.maxHeight);
         if (width > this.minWidth && height > this.minHeight && width < this.maxWidth && height < this.maxHeight) {
             console.log('call resize image');
             this.resizeImage(width, height);
-            // Without this Firefox will not re-calculate the the image dimensions until drag end
-            this.$container.offset({'left': left, 'top': top});
+            this.resizeContainer.offset({'left': left, 'top': top});
         }
     }
 
@@ -169,7 +160,7 @@ console.log(this.originalImg);
         mouse.x = (e.clientX || e.pageX || touches[0].clientX) + $(window).scrollLeft();
         mouse.y = (e.clientY || e.pageY || touches[0].clientY) + $(window).scrollTop();
 
-        this.$container.offset({
+        this.resizeContainer.offset({
             'left': mouse.x - ( this.state.mouseX - this.state.containerLeft ),
             'top': mouse.y - ( this.state.mouseY - this.state.containerTop )
         });
